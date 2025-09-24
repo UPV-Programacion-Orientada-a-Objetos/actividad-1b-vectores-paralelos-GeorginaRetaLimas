@@ -2,12 +2,13 @@
 #include <string>
 
 void menu();
+int validarCodigoEntrada();
+int buscarIndiceCodigo(int cod_entrada, int* codigo, int tam);
 
 int main() {
     // Tamaño de los vectores predefinido en variable
     int tam = 6;
-    int accion;
-    bool entrada_valida;
+    int accion, cod_entrada, index;
 
     int codigo[tam] = {101, 102, 103, 104, 105, 106};
     std::string nombre[tam] = {
@@ -47,47 +48,26 @@ int main() {
 
         switch(accion){
             case 1: // consulta
-                int cod_entrada;
 
-                // Ciclo de Validación del codigo ingresado
-                do{
-                    std::cout<<"\nIngrese codigo de producto: ";
-                    std::cin>>cod_entrada;
+                // Validamos que el codigo de entrada sea valido
+                cod_entrada = validarCodigoEntrada();
 
-                    // Validación de fallo de lectura
-                    if(std::cin.fail()){
-                        std::cout<<"Error: Valor invalido, no entero. Favor de ingresar numero entero"<<std::endl;
-                        std::cin.clear();
-                        std::cin.ignore(1024, '\n');
+                // Buscamos el indice del producto del codigo, si no lo encuentra retorna tam
+                index = buscarIndiceCodigo(cod_entrada, codigo, tam);
 
-                        entrada_valida = false;
-                    } else { // Lectura correcta
-                        entrada_valida = true;
-                    }
-                } while(!entrada_valida);
-
-                // Busqueda del codigo y muestreo de datos
-                bool cod_encontrado;
-                for(int i = 0; i < tam; i++){
-                    if(cod_entrada == codigo[i]){
-                        std::cout<<"\nInformación del producto - - - -"<<std::endl;
-                        std::cout<<"Código: "<<codigo[i]<<std::endl;
-                        std::cout<<"Nombre: "<<nombre[i]<<std::endl;
-                        std::cout<<"Cantidad en stock: "<<stock[i]<<std::endl;
-                        std::cout<<"Precio Unitario: $"<<precio[i]<<std::endl;
-
-                        cod_encontrado = true;
-                        break; // Cerramos ciclo para no gastar recurso
-                    } else {
-                        cod_encontrado = false;
-                    }
-                }
-
-                if (!cod_encontrado){
-                    std::cout<<"\nError: No hay un producto con el codigo "<<cod_entrada<<std::endl;
+                // Si retorno tam es porque no encontro el codigo
+                if(index == tam){
+                   std::cout<<"\nError: No hay un producto con el codigo "<<cod_entrada<<std::endl; 
+                } else { // Lo encontro
+                    std::cout<<"\nInformación del producto - - - -"<<std::endl;
+                    std::cout<<"Código: "<<codigo[index]<<std::endl;
+                    std::cout<<"Nombre: "<<nombre[index]<<std::endl;
+                    std::cout<<"Cantidad en stock: "<<stock[index]<<std::endl;
+                    std::cout<<"Precio Unitario: $"<<precio[index]<<std::endl;
                 }
             break;
-            case 2:
+            case 2: // Actualizar inventario
+
             break;
             case 3:
             break;
@@ -121,4 +101,50 @@ void menu(){
     std::cout<<"5. Salir"<<std::endl;
 
     std::cout<<"\nOpción seleccionada: ";
+}
+
+int validarCodigoEntrada(){
+    int cod_entrada;
+    bool entrada_valida;
+
+    // Ciclo de Validación del codigo ingresado
+    do{
+        std::cout<<"\nIngrese código de producto: ";
+        std::cin>>cod_entrada;
+
+        // Validación de fallo de lectura
+        if(std::cin.fail()){
+            std::cout<<"Error: Valor invalido, no entero. Favor de ingresar numero entero"<<std::endl;
+            std::cin.clear();
+            std::cin.ignore(1024, '\n');
+
+            entrada_valida = false;
+        } else { // Lectura correcta
+            entrada_valida = true;
+        }
+    } while(!entrada_valida);
+
+    return cod_entrada;
+}
+
+int buscarIndiceCodigo(int cod_entrada, int* codigo, int tam){
+    int index;
+    
+    // Busqueda del codigo y muestreo de datos
+    bool cod_encontrado = false;
+    for(int i = 0; i < tam; i++){
+        if(cod_entrada == codigo[i]){
+            cod_encontrado = true;
+            index = i;
+            break;
+        } else {
+            cod_encontrado = false;
+        }
+    }
+
+    if (!cod_encontrado){
+        index = tam;
+    }
+
+    return index;
 }
