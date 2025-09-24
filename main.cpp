@@ -4,13 +4,10 @@
 void menu();
 
 int main() {
-    // Tamaño de los vectores
+    // Tamaño de los vectores predefinido en variable
     int tam = 6;
-
-    // Variable para ingresar los datos para validarlos
-    std::string entrada;
-
     int accion;
+    bool entrada_valida;
 
     int codigo[tam] = {101, 102, 103, 104, 105, 106};
     std::string nombre[tam] = {
@@ -24,13 +21,12 @@ int main() {
     int stock[tam] = {100, 20, 10, 5, 15, 30};
     float precio[tam] = {4.0f, 35.0f, 40.0f, 499.9f, 45.0f, 49.9f};
 
-
     std::cout<<"\tBienvenido a Ferretería el Martillo"<<std::endl;
 
     do{menu();
         std::cin>>accion;
 
-        // Valida si falló la lectura
+        // Validación si falló la lectura
         if(std::cin.fail()){
             std::cout<<"Error: Valor invalido, no entero. Favor de ingresar numero entero"<<std::endl;
             
@@ -44,23 +40,52 @@ int main() {
                 1024 -> Son los carácteres maximos que va (y puede) a descartar el ignore()
                 \n   -> Es una delimitacion, detentra el descarte cuando vea un salto de linea
                         independientemente de ya fueron los 1024 carácteres
-            
             */
 
             continue;
         }
 
-
-        //std::cin>>entrada;
-
-        // Verificamos si lo ingresado no es un entero
-        //for(char c:)
-
-        // Convertimos el dato de entrada en un entero
-        //accion = std::stoi(entrada);
-
         switch(accion){
-            case 1:
+            case 1: // consulta
+                int cod_entrada;
+
+                // Ciclo de Validación del codigo ingresado
+                do{
+                    std::cout<<"\nIngrese codigo de producto: ";
+                    std::cin>>cod_entrada;
+
+                    // Validación de fallo de lectura
+                    if(std::cin.fail()){
+                        std::cout<<"Error: Valor invalido, no entero. Favor de ingresar numero entero"<<std::endl;
+                        std::cin.clear();
+                        std::cin.ignore(1024, '\n');
+
+                        entrada_valida = false;
+                    } else { // Lectura correcta
+                        entrada_valida = true;
+                    }
+                } while(!entrada_valida);
+
+                // Busqueda del codigo y muestreo de datos
+                bool cod_encontrado;
+                for(int i = 0; i < tam; i++){
+                    if(cod_entrada == codigo[i]){
+                        std::cout<<"\nInformación del producto - - - -"<<std::endl;
+                        std::cout<<"Código: "<<codigo[i]<<std::endl;
+                        std::cout<<"Nombre: "<<nombre[i]<<std::endl;
+                        std::cout<<"Cantidad en stock: "<<stock[i]<<std::endl;
+                        std::cout<<"Precio Unitario: $"<<precio[i]<<std::endl;
+
+                        cod_encontrado = true;
+                        break; // Cerramos ciclo para no gastar recurso
+                    } else {
+                        cod_encontrado = false;
+                    }
+                }
+
+                if (!cod_encontrado){
+                    std::cout<<"\nError: No hay un producto con el codigo "<<cod_entrada<<std::endl;
+                }
             break;
             case 2:
             break;
@@ -75,6 +100,9 @@ int main() {
             break;
         }
 
+        // Limpialos el cin cada que iteramos para evitar errores
+        std::cin.clear();
+        std::cin.ignore(1024, '\n');
 
     } while(accion != 5);
 
