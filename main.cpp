@@ -13,11 +13,11 @@ int main() {
 
     int codigo[tam] = {101, 102, 103, 104, 105, 106};
     std::string nombre[tam] = {
-        "Torinillos para madera",
+        "Torinillos de metal",
         "Cinta de color negro",
         "Destornillador plano",
-        "taladro eléctrico gris",
-        "Martillo de carpintero",
+        "Taladro eléctrico",
+        "Martillo carpintero",
         "Bombilla ahorradora"
     };
     int stock[tam] = {100, 20, 10, 5, 15, 30};
@@ -95,7 +95,14 @@ int main() {
                     std::cout<<"Stock actualizado correctamente..."<<std::endl;
                 }
             break;
-            case 3:
+            case 3: // Generación de reportes
+                std::cout<<"\n-- R E P O R T E  D E  T O D O  P R O D U C T O --"<<std::endl;
+                std::cout<<"+-------+-----------------------+-------+-------+"<<std::endl;
+                for(int i = 0; i < tam; i++){
+                    //codigo nombre stock precio
+                    std::cout<<"| "<<codigo[i]<<"\t| "<< nombre[i] <<"\t| "<<stock[i]<<"\t| "<< precio[i] <<"\t|"<<std::endl;
+                }
+                std::cout<<"+-------+-----------------------+-------+-------+"<<std::endl;
             break;
             case 4:
             break;
