@@ -10,6 +10,7 @@ int main() {
     int tam = 6;
     int accion, cod_entrada, index;
     bool valor_valido;
+    float precio_caro;
 
     int codigo[tam] = {101, 102, 103, 104, 105, 106};
     std::string nombre[tam] = {
@@ -103,9 +104,9 @@ int main() {
                 }
                 std::cout<<"+-------+-----------------------+-------+-------+"<<std::endl;
             break;
-            case 4: { // Producto mas caro
+            case 4: // Producto mas caro
                 index = 0;
-                float precio_caro = precio[0];
+                precio_caro = precio[0];
 
                 for(int i = 1; i < tam; i++){
 
@@ -116,7 +117,7 @@ int main() {
                 }
 
                 std::cout <<"El producto más caro es: " << nombre[index] << " con un precio de $" << precio[index] << std::endl;
-            break;}
+            break;
             case 5: // Salir
                 std::cout<<"\nBye bye :D"<<std::endl;
             break;
