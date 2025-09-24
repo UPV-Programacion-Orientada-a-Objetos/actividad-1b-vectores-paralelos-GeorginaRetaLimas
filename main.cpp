@@ -2,13 +2,14 @@
 #include <string>
 
 void menu();
-int validarCodigoEntrada();
+int validarEntradaEnteros(std::string texto);
 int buscarIndiceCodigo(int cod_entrada, int* codigo, int tam);
 
 int main() {
     // Tamaño de los vectores predefinido en variable
     int tam = 6;
     int accion, cod_entrada, index;
+    bool valor_valido;
 
     int codigo[tam] = {101, 102, 103, 104, 105, 106};
     std::string nombre[tam] = {
@@ -37,11 +38,9 @@ int main() {
             // Descarta la entrada incorrecta del buffer
             std::cin.ignore(1024, '\n');
 
-            /*
-                1024 -> Son los carácteres maximos que va (y puede) a descartar el ignore()
-                \n   -> Es una delimitacion, detentra el descarte cuando vea un salto de linea
-                        independientemente de ya fueron los 1024 carácteres
-            */
+            //1024 -> Son los carácteres maximos que va (y puede) a descartar el ignore()
+            //\n   -> Es una delimitacion, detentra el descarte cuando vea un salto de linea
+            //            independientemente de ya fueron los 1024 carácteres
 
             continue;
         }
@@ -50,7 +49,7 @@ int main() {
             case 1: // consulta
 
                 // Validamos que el codigo de entrada sea valido
-                cod_entrada = validarCodigoEntrada();
+                cod_entrada = validarEntradaEnteros("Ingrese el código del producto");
 
                 // Buscamos el indice del producto del codigo, si no lo encuentra retorna tam
                 index = buscarIndiceCodigo(cod_entrada, codigo, tam);
@@ -67,7 +66,34 @@ int main() {
                 }
             break;
             case 2: // Actualizar inventario
+                cod_entrada = validarEntradaEnteros("Ingrese el código del producto");
+                index = buscarIndiceCodigo(cod_entrada, codigo, tam);
 
+                if(index == tam){
+                   std::cout<<"\nError: No hay un producto con el codigo "<<cod_entrada<<std::endl; 
+                } else {
+                    std::cout<<"\nInformación del producto - - - -"<<std::endl;
+                    std::cout<<"Nombre: "<<nombre[index]<<std::endl;
+                    std::cout<<"Cantidad actual en stock: "<<stock[index]<<std::endl;
+
+                    // Ciclo para validar que no se ingrese un stock negativo
+                    do{
+                        int cambio = validarEntradaEnteros("Ingrese la cantidad de cambio");
+                        int nuevo_stock = stock[index] + cambio;
+
+                        if(nuevo_stock < 0){
+                            std::cout<<"Error: No se puede tener un stock negativo"<<std::endl;
+                            valor_valido = false;
+                        } else {
+                            // En caso que no sea menor a 0 se actualiza
+                            stock[index] = nuevo_stock;
+                            valor_valido = true;
+                        }
+
+                    } while(!valor_valido);
+
+                    std::cout<<"Stock actualizado correctamente..."<<std::endl;
+                }
             break;
             case 3:
             break;
@@ -103,13 +129,13 @@ void menu(){
     std::cout<<"\nOpción seleccionada: ";
 }
 
-int validarCodigoEntrada(){
+int validarEntradaEnteros(std::string texto){
     int cod_entrada;
     bool entrada_valida;
 
     // Ciclo de Validación del codigo ingresado
     do{
-        std::cout<<"\nIngrese código de producto: ";
+        std::cout<<"\n"<<texto<<": ";
         std::cin>>cod_entrada;
 
         // Validación de fallo de lectura
@@ -130,18 +156,20 @@ int validarCodigoEntrada(){
 int buscarIndiceCodigo(int cod_entrada, int* codigo, int tam){
     int index;
     
-    // Busqueda del codigo y muestreo de datos
     bool cod_encontrado = false;
+
+    // Usamos un for para buscar una coincidencia en la entrada y codigo
     for(int i = 0; i < tam; i++){
         if(cod_entrada == codigo[i]){
             cod_encontrado = true;
-            index = i;
-            break;
+            index = i; // Pasamos el index
+            break; // Cerramos el ciclo
         } else {
             cod_encontrado = false;
         }
     }
 
+    // Si no encuentra nada asignamos el valor del tamaño
     if (!cod_encontrado){
         index = tam;
     }
