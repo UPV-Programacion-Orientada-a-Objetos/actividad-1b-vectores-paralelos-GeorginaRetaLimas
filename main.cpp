@@ -39,8 +39,7 @@ int main() {
             std::cin.ignore(1024, '\n');
 
             //1024 -> Son los carácteres maximos que va (y puede) a descartar el ignore()
-            //\n   -> Es una delimitacion, detentra el descarte cuando vea un salto de linea
-            //            independientemente de ya fueron los 1024 carácteres
+            //\n   -> Es una delimitacion, detentra el descarte cuando vea un salto de linea independientemente de ya fueron los 1024 carácteres
 
             continue;
         }
@@ -104,9 +103,22 @@ int main() {
                 }
                 std::cout<<"+-------+-----------------------+-------+-------+"<<std::endl;
             break;
-            case 4:
-            break;
-            case 5:
+            case 4: { // Producto mas caro
+                index = 0;
+                float precio_caro = precio[0];
+
+                for(int i = 1; i < tam; i++){
+
+                    if(precio[i] > precio_caro){
+                        precio_caro = precio[i];
+                        index = i;
+                    }
+                }
+
+                std::cout <<"El producto más caro es: " << nombre[index] << " con un precio de $" << precio[index] << std::endl;
+            break;}
+            case 5: // Salir
+                std::cout<<"\nBye bye :D"<<std::endl;
             break;
             default:
                 std::cout<<"Error: La opción no esta en el menú"<<std::endl;
